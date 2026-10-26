@@ -107,3 +107,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+# WARP WireGuard profile and account
+warp/
+youtube-cookies.txt

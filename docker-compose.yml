@@ -1,11 +1,29 @@
 services:
+  # Cloudflare WARP tunnel so outbound traffic doesn't come from the
+  # datacenter IP (SoundCloud returns 403 for it). Profile is generated
+  # with wgcf into ./warp/wg_confs/wg0.conf (not committed).
+  warp:
+    image: lscr.io/linuxserver/wireguard:latest
+    container_name: moe-muse-warp
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    volumes:
+      - ./warp/wg_confs:/config/wg_confs
+
   moe-muse:
     build: .
     image: moe-muse:latest
     container_name: moe-muse
     restart: unless-stopped
+    network_mode: service:warp
+    depends_on:
+      - warp
     env_file: .env
     volumes:
       - ./data:/data
-      # Optional: YouTube cookies for when the datacenter IP gets blocked.
+      # YouTube cookies (required: YouTube blocks the server IP). Uncomment
+      # once the file exists and set YT_DLP_COOKIES_PATH in .env.
       # - ./youtube-cookies.txt:/run/secrets/youtube-cookies.txt:ro
