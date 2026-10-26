@@ -1,0 +1,11 @@
+services:
+  moe-muse:
+    build: .
+    image: moe-muse:latest
+    container_name: moe-muse
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./data:/data
+      # Optional: YouTube cookies for when the datacenter IP gets blocked.
+      # - ./youtube-cookies.txt:/run/secrets/youtube-cookies.txt:ro
