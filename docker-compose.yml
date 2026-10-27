@@ -24,6 +24,7 @@ services:
     env_file: .env
     volumes:
       - ./data:/data
-      # YouTube cookies (required: YouTube blocks the server IP). Uncomment
-      # once the file exists and set YT_DLP_COOKIES_PATH in .env.
-      # - ./youtube-cookies.txt:/run/secrets/youtube-cookies.txt:ro
+      # YouTube cookies (required: YouTube blocks the server IP).
+      - ./youtube-cookies.txt:/run/secrets/youtube-cookies.txt:ro
+    environment:
+      - YT_DLP_COOKIES_PATH=/run/secrets/youtube-cookies.txt
